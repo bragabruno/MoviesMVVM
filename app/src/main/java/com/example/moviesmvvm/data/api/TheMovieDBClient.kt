@@ -1,18 +1,15 @@
 package com.example.moviesmvvm.data.api
 
-import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import java.util.concurrent.TimeUnit
 
-
 const val API_KEY = "819950d4cf35be1fb70d8746bc0796bf"
-const val BASE_URL =  "https://api.themoviedb.org/3/"
+const val BASE_URL = "https://api.themoviedb.org/3/"
 const val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w342"
 
 const val FIRST_PAGE = 1

@@ -1,6 +1,5 @@
 package com.example.moviesmvvm.data.vo
 
-
 import com.google.gson.annotations.SerializedName
 
 data class Movie(

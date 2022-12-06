@@ -8,7 +8,7 @@ import com.example.moviesmvvm.data.vo.MovieDetails
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class MovieDetailsNetworkDataSource (private val apiService : TheMovieDBInterface, private val compositeDisposable: CompositeDisposable) {
+class MovieDetailsNetworkDataSource(private val apiService: TheMovieDBInterface, private val compositeDisposable: CompositeDisposable) {
 
     private val _networkState = MutableLiveData<NetworkState>()
     val networkState: LiveData<NetworkState>
@@ -19,7 +19,6 @@ class MovieDetailsNetworkDataSource (private val apiService : TheMovieDBInterfac
         get() = _downloadedMoviewDetailsResponse
 
     fun fetchMovieDetails(movieId: Int) {
-
         _networkState.postValue(NetworkState.LOADING)
 
         try {
@@ -37,10 +36,8 @@ class MovieDetailsNetworkDataSource (private val apiService : TheMovieDBInterfac
                         }
                     )
             )
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
             Log.e("MovieDetailsDateSource", e.message!!)
         }
     }
-
 }
