@@ -1,8 +1,8 @@
 package com.example.moviesmvvm.ui.single_movie_details
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -26,11 +26,10 @@ import java.util.*
 
 class SingleMovie : AppCompatActivity() {
 
-    private  lateinit var viewModel: SingleMovieViewModel
+    private lateinit var viewModel: SingleMovieViewModel
     private lateinit var movieDetailsRepository: MovieDetailsRepository
     private lateinit var binding: ActivitySingleMovieBinding
     private lateinit var youTubePlayerView: YouTubePlayerView
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,25 +39,30 @@ class SingleMovie : AppCompatActivity() {
 
         val movieId: Int = intent.getIntExtra("id", 1)
 
-        val apiService : TheMovieDBInterface = TheMovieDBClient.getClient()
+        val apiService: TheMovieDBInterface = TheMovieDBClient.getClient()
         movieDetailsRepository = MovieDetailsRepository(apiService)
 
         viewModel = getViewModel(movieId)
 
-        viewModel.movieDetails.observe(this, Observer {
-            bindUI(it)
-        })
+        viewModel.movieDetails.observe(
+            this,
+            Observer {
+                bindUI(it)
+            }
+        )
 
-        viewModel.movieDetails.observe(this, Observer {
-            binding.progressBar.visibility = if (it.equals( NetworkState.LOADED)) View.VISIBLE else View.GONE
-            binding.txtError.visibility = if (it.equals(NetworkState.ERROR)) View.VISIBLE else View.GONE
-        })
+        viewModel.movieDetails.observe(
+            this,
+            Observer {
+                binding.progressBar.visibility = if (it.equals(NetworkState.LOADED)) View.VISIBLE else View.GONE
+                binding.txtError.visibility = if (it.equals(NetworkState.ERROR)) View.VISIBLE else View.GONE
+            }
+        )
 
         showTrailerPlayer()
-
     }
 
-    fun bindUI(it: MovieDetails){
+    fun bindUI(it: MovieDetails) {
         binding.apply {
             movieTitle.text = it.title
             movieTagline.text = it.tagline
@@ -74,17 +78,20 @@ class SingleMovie : AppCompatActivity() {
             val moviePosterURL = POSTER_BASE_URL + it.posterPath
             Glide.with(this@SingleMovie)
                 .load(moviePosterURL)
-                .into(ivMoviePoster);
+                .into(ivMoviePoster)
         }
     }
 
-    private  fun getViewModel(movieId:Int): SingleMovieViewModel {
-        return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                @Suppress("UNCHECKED_CAST")
-                return SingleMovieViewModel(movieDetailsRepository, movieId) as T
+    private fun getViewModel(movieId: Int): SingleMovieViewModel {
+        return ViewModelProviders.of(
+            this,
+            object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    @Suppress("UNCHECKED_CAST")
+                    return SingleMovieViewModel(movieDetailsRepository, movieId) as T
+                }
             }
-        })[SingleMovieViewModel::class.java]
+        )[SingleMovieViewModel::class.java]
     }
 
     fun TrailerPlayer() {
@@ -103,7 +110,7 @@ class SingleMovie : AppCompatActivity() {
     fun showTrailerPlayer() {
         binding.apply {
             ivMoviePoster.setOnClickListener {
-                if (ivMoviePoster.isVisible){
+                if (ivMoviePoster.isVisible) {
                     ivMoviePoster.visibility = View.GONE
                     youtubePlayerView.visibility = View.VISIBLE
                 }
@@ -111,6 +118,4 @@ class SingleMovie : AppCompatActivity() {
             }
         }
     }
-
-
 }

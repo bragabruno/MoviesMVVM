@@ -13,9 +13,9 @@ import com.example.moviesmvvm.data.api.TheMovieDBInterface
 import com.example.moviesmvvm.data.repository.NetworkState
 import com.example.moviesmvvm.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class PopularMovieActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: MainActivityViewModel
+    private lateinit var viewModel: PopularMovieActivityViewModel
 
     lateinit var movieRepository: MoviePagedListRepository
 
@@ -73,15 +73,15 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun getViewModel(): MainActivityViewModel {
+    private fun getViewModel(): PopularMovieActivityViewModel {
         return ViewModelProviders.of(
             this,
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
                     @Suppress("UNCHECKED_CAST")
-                    return MainActivityViewModel(movieRepository) as T
+                    return PopularMovieActivityViewModel(movieRepository) as T
                 }
             }
-        )[MainActivityViewModel::class.java]
+        )[PopularMovieActivityViewModel::class.java]
     }
 }

@@ -7,15 +7,15 @@ import com.example.moviesmvvm.data.repository.NetworkState
 import com.example.moviesmvvm.data.vo.Movie
 import io.reactivex.disposables.CompositeDisposable
 
-class MainActivityViewModel(private val movieRepository : MoviePagedListRepository) : ViewModel() {
+class PopularMovieActivityViewModel(private val movieRepository: MoviePagedListRepository) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
-    val  moviePagedList : LiveData<PagedList<Movie>> by lazy {
+    val moviePagedList: LiveData<PagedList<Movie>> by lazy {
         movieRepository.fetchLiveMoviePagedList(compositeDisposable)
     }
 
-    val  networkState : LiveData<NetworkState> by lazy {
+    val networkState: LiveData<NetworkState> by lazy {
         movieRepository.getNetworkState()
     }
 
@@ -23,10 +23,8 @@ class MainActivityViewModel(private val movieRepository : MoviePagedListReposito
         return moviePagedList.value?.isEmpty() ?: true
     }
 
-
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()
     }
-
 }

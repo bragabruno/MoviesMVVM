@@ -5,7 +5,6 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -14,11 +13,9 @@ import com.example.moviesmvvm.R
 import com.example.moviesmvvm.data.api.POSTER_BASE_URL
 import com.example.moviesmvvm.data.repository.NetworkState
 import com.example.moviesmvvm.data.vo.Movie
-import com.example.moviesmvvm.databinding.MovieListItemBinding
 import com.example.moviesmvvm.ui.single_movie_details.SingleMovie
 import kotlinx.android.synthetic.main.movie_list_item.view.*
 import kotlinx.android.synthetic.main.network_state_item.view.*
-
 
 class PopularMoviePagedListAdapter(public val context: Context) : PagedListAdapter<Movie, RecyclerView.ViewHolder>(MovieDiffCallback()) {
 
@@ -42,13 +39,11 @@ class PopularMoviePagedListAdapter(public val context: Context) : PagedListAdapt
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == MOVIE_VIEW_TYPE) {
-            (holder as MovieItemViewHolder).bind(getItem(position),context)
-        }
-        else {
+            (holder as MovieItemViewHolder).bind(getItem(position), context)
+        } else {
             (holder as NetworkStateItemViewHolder).bind(networkState)
         }
     }
-
 
     private fun hasExtraRow(): Boolean {
         return networkState != null && networkState != NetworkState.LOADED
@@ -66,9 +61,6 @@ class PopularMoviePagedListAdapter(public val context: Context) : PagedListAdapt
         }
     }
 
-
-
-
     class MovieDiffCallback : DiffUtil.ItemCallback<Movie>() {
         override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem.id == newItem.id
@@ -77,56 +69,47 @@ class PopularMoviePagedListAdapter(public val context: Context) : PagedListAdapt
         override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem == newItem
         }
-
     }
 
+    class MovieItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-    class MovieItemViewHolder (view: View) : RecyclerView.ViewHolder(view) {
-
-        fun bind(movie: Movie?,context: Context) {
-
+        fun bind(movie: Movie?, context: Context) {
             itemView.cv_movie_title.text = movie?.title
-            itemView.cv_movie_release_date.text =  movie?.releaseDate
+            itemView.cv_movie_release_date.text = movie?.releaseDate
 
             val moviePosterURL = POSTER_BASE_URL + movie?.posterPath
             Glide.with(itemView.context)
                 .load(moviePosterURL)
-                .into(itemView.cv_iv_movie_poster);
+                .into(itemView.cv_iv_movie_poster)
 
-            itemView.setOnClickListener{
+            itemView.setOnClickListener {
                 val intent = Intent(context, SingleMovie::class.java)
                 intent.putExtra("id", movie?.id)
                 context.startActivity(intent)
             }
-
         }
-
     }
 
-    class NetworkStateItemViewHolder (view: View) : RecyclerView.ViewHolder(view) {
+    class NetworkStateItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(networkState: NetworkState?) {
             if (networkState != null && networkState == NetworkState.LOADING) {
-                itemView.progress_bar_item.visibility = View.VISIBLE;
-            }
-            else  {
-                itemView.progress_bar_item.visibility = View.GONE;
+                itemView.progress_bar_item.visibility = View.VISIBLE
+            } else {
+                itemView.progress_bar_item.visibility = View.GONE
             }
 
             if (networkState != null && networkState == NetworkState.ERROR) {
-                itemView.error_msg_item.visibility = View.VISIBLE;
-                itemView.error_msg_item.text = networkState.msg;
-            }
-            else if (networkState != null && networkState == NetworkState.ENDOFLIST) {
-                itemView.error_msg_item.visibility = View.VISIBLE;
-                itemView.error_msg_item.text = networkState.msg;
-            }
-            else {
-                itemView.error_msg_item.visibility = View.GONE;
+                itemView.error_msg_item.visibility = View.VISIBLE
+                itemView.error_msg_item.text = networkState.msg
+            } else if (networkState != null && networkState == NetworkState.ENDOFLIST) {
+                itemView.error_msg_item.visibility = View.VISIBLE
+                itemView.error_msg_item.text = networkState.msg
+            } else {
+                itemView.error_msg_item.visibility = View.GONE
             }
         }
     }
-
 
     fun setNetworkState(newNetworkState: NetworkState) {
         val previousState = this.networkState
@@ -135,18 +118,13 @@ class PopularMoviePagedListAdapter(public val context: Context) : PagedListAdapt
         val hasExtraRow = hasExtraRow()
 
         if (hadExtraRow != hasExtraRow) {
-            if (hadExtraRow) {                             //hadExtraRow is true and hasExtraRow false
-                notifyItemRemoved(super.getItemCount())    //remove the progressbar at the end
-            } else {                                       //hasExtraRow is true and hadExtraRow false
-                notifyItemInserted(super.getItemCount())   //add the progressbar at the end
+            if (hadExtraRow) { // hadExtraRow is true and hasExtraRow false
+                notifyItemRemoved(super.getItemCount()) // remove the progressbar at the end
+            } else { // hasExtraRow is true and hadExtraRow false
+                notifyItemInserted(super.getItemCount()) // add the progressbar at the end
             }
-        } else if (hasExtraRow && previousState != newNetworkState) { //hasExtraRow is true and hadExtraRow true and (NetworkState.ERROR or NetworkState.ENDOFLIST)
-            notifyItemChanged(itemCount - 1)       //add the network message at the end
+        } else if (hasExtraRow && previousState != newNetworkState) { // hasExtraRow is true and hadExtraRow true and (NetworkState.ERROR or NetworkState.ENDOFLIST)
+            notifyItemChanged(itemCount - 1) // add the network message at the end
         }
-
     }
-
-
-
-
 }
