@@ -15,7 +15,7 @@
         android:theme="@style/Theme.MoviesMVVM"
         tools:targetApi="31" >
         <activity
-            android:name=".NowPlayingActivity"
+            android:name=".ui.now_playing_movie.NowPlayingActivity"
             android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"

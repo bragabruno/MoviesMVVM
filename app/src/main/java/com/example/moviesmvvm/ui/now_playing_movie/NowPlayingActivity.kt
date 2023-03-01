@@ -2,7 +2,6 @@ package com.example.moviesmvvm.ui.now_playing_movie
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.moviesmvvm.R
 import com.example.moviesmvvm.databinding.ActivityNowPlayingBinding
 
 class NowPlayingActivity : AppCompatActivity() {
